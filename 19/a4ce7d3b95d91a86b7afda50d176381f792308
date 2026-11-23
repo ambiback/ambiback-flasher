@@ -1,0 +1,85 @@
+.env.example
+  s_507b6a8544131b::t_2e11cc78161346 1-17
+.gitignore
+  s_ed4f085c6942da::t_2c3d34703e7d33 1-18
+AGENTS.md
+  s_ed4f085c6942da::t_524eb9c6ef66d1 1-54
+"AmbiBack USB Flasher.csproj"
+  s_ed4f085c6942da::t_fd650615441710 1-108
+"AmbiBack USB Flasher.sln"
+  s_ed4f085c6942da::t_84ab938285d5ce 1-25
+App.config
+  s_ed4f085c6942da::t_5c3a1308ac78cf 1-54
+CDeviceHelper.cs
+  s_ed4f085c6942da::t_edcd6f292782f5 1-169
+Globals.cs
+  s_ed4f085c6942da::t_00d200a929e477 1-220
+LICENSE
+  s_ed4f085c6942da::t_55268677f66b02 1-675
+Program.cs
+  s_ed4f085c6942da::t_f45c202350c0de 1-35
+Properties/AssemblyInfo.cs
+  s_ed4f085c6942da::t_afba49010927d7 1-36
+Properties/Resources.Designer.cs
+  s_ed4f085c6942da::t_105245e4c61b82 1-71
+Properties/Resources.resx
+  s_ed4f085c6942da::t_416024cdabd85d 1-117
+Properties/Settings.Designer.cs
+  s_ed4f085c6942da::t_654e673fe722f4 1-182
+Properties/Settings.settings
+  s_ed4f085c6942da::t_f7a81bbe816238 1-45
+README.de.md
+  s_ed4f085c6942da::t_69f1e53a63fe96 1-84
+README.md
+  s_ed4f085c6942da::t_74c619df78573e 1-84
+THIRD_PARTY_NOTICES.md
+  s_acc4bd380ee0d1::t_1f3ac140cc8f85 1-15
+frmMain.Designer.cs
+  s_ed4f085c6942da::t_a32ea380b9fc6c 1-859
+frmMain.cs
+  s_ed4f085c6942da::t_08f440cb82d1a8 1-1202
+frmMain.resx
+  s_ed4f085c6942da::t_517b8e3f3967d6 1-424
+frmSettings.Designer.cs
+  s_ed4f085c6942da::t_8efa464cca5555 1-294
+frmSettings.cs
+  s_ed4f085c6942da::t_3c52fcce8f97d4 1-124
+frmSettings.resx
+  s_ed4f085c6942da::t_bc46c037195def 1-61
+json.cs
+  s_ed4f085c6942da::t_e38c2de8d261a9 1-1397
+scripts/upload-firmware.ps1
+  s_507b6a8544131b::t_3638905e6dc37c 1-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "19a4ce7d3b95d91a86b7afda50d176381f792308",
+  "prompts": {},
+  "sessions": {
+    "s_507b6a8544131b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a20845-395d-7ac3-b4e3-ded61eae28ac",
+        "model": "gpt-6.1-terra"
+      },
+      "human_author": "Andre Lorbach <1675286+alorbach@users.noreply.github.com>"
+    },
+    "s_acc4bd380ee0d1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a208b0-d017-7b92-949d-d89eb5bd9d05",
+        "model": "gpt-6.1-terra"
+      },
+      "human_author": "Andre Lorbach <1675286+alorbach@users.noreply.github.com>"
+    },
+    "s_ed4f085c6942da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "25338f00-8e49-4247-ba73-a2a50acc53dc",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andre Lorbach <1675286+alorbach@users.noreply.github.com>"
+    }
+  }
+}
