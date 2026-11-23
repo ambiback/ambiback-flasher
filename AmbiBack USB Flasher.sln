@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmbiBack USB Flasher", "AmbiBack USB Flasher.csproj", "{5E957301-FBD9-4616-92FB-EB171F9208EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E957301-FBD9-4616-92FB-EB171F9208EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E957301-FBD9-4616-92FB-EB171F9208EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E957301-FBD9-4616-92FB-EB171F9208EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E957301-FBD9-4616-92FB-EB171F9208EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {40AB2B8F-BA1A-4F37-AD32-4086312B390B}
+	EndGlobalSection
+EndGlobal

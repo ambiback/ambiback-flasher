@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AmbiBack_USB_Flasher.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="szComPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="szDevice" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="szFirmwareVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="szBautRate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">115200</Value>
+    </Setting>
+    <Setting Name="szWifiKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="szWifiSSID" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="szBuildEnv" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1.0.4</Value>
+    </Setting>
+    <Setting Name="szBinDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files (x86)\Arduino</Value>
+    </Setting>
+    <Setting Name="szSourceDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\AmbiBack\ambiback-firmware</Value>
+    </Setting>
+    <Setting Name="szSourceFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">AmbiBack.Controller.ino</Value>
+    </Setting>
+    <Setting Name="szExtraIncludeDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\AmbiBack\Arduino</Value>
+    </Setting>
+    <Setting Name="szStartupPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="szBuildDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\AmbiBack\build</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

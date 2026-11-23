@@ -1,0 +1,18 @@
+# Build output
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Local tools and firmware
+build/
+firmware/
+buildenv/
+buildtools/
+_usbdrivers/
+esptool.exe
+pscp.exe
+.env
+*.ppk
+*.pem
