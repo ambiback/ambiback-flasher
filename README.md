@@ -15,11 +15,15 @@ It is part of the [AmbiBack project](https://github.com/ambiback) and works with
 
 ## Features
 
-- Build firmware for all AmbiBack device types through `arduino-builder`
-- Flash firmware over USB with `esptool`
+- **Easy mode:** pick the device from pictures, choose the USB port and press **Install Firmware**. If no image is there yet, the tool downloads everything it needs, builds the newest firmware from GitHub and flashes it. Wi-Fi can be set right after flashing.
+- **Advanced mode:** all details as before: build options, builder and ESP32 core, serial monitor, device info and control, upload.
+- Build firmware for all AmbiBack device types with `arduino-cli` (default) or `arduino-builder` (Arduino IDE 1.8.x)
+- **Tools > Set Up Arduino and ESP32** downloads arduino-cli and/or the Arduino IDE 1.8.x, an ESP32 core in the chosen version, the firmware libraries and the firmware source
+- Flash firmware over USB with `esptool`, with progress
 - Upload firmware to your own update server with OpenSSH `sftp`
 - Serial monitor
 - Device control: info, reboot, Wi-Fi setup, LED test and factory defaults
+- English and German user interface (**Language** menu)
 
 ## Building the tool
 
@@ -29,24 +33,28 @@ Requires Windows, Visual Studio with .NET desktop development and the .NET Frame
 msbuild "AmbiBack USB Flasher.sln" -p:Configuration=Release
 ```
 
-## Required files
+## Folders and downloads
 
-Compilers, ESP32 cores, tools and firmware images are not included. Place them in the application folder, or in the folder set as the startup path:
+All folders are relative to one data folder: the application folder if it is writable, otherwise `%LOCALAPPDATA%\AmbiBack\USB Flasher`. Every path can be changed in **File > Settings**; an empty field uses the default.
 
 ```text
-esptool.exe
-firmware\boot_app0.bin
-firmware\bootloader_qio_80m.bin
-firmware\<device>\<version>\AmbiBack.Controller.ino.bin
-firmware\<device>\<version>\AmbiBack.Controller.ino.partitions.bin
-buildenv\<version>\packages\esp32\hardware\esp32\<version>\
-buildtools\<version>\tools\
+firmware\<device>\<version>\        built images (AmbiBack.Controller.ino.bin, .partitions.bin, .bootloader.bin, buildinfo.txt)
+tools\arduino-cli\<version>\        arduino-cli
+tools\arduino-ide\<version>\        Arduino IDE 1.8.x with arduino-builder
+arduino-cli\<core>\                  ESP32 core installed through arduino-cli (one folder per core version)
+buildenv\<core>\, buildtools\<core>\ ESP32 core and tools for arduino-builder
+sketchbook\libraries\               firmware libraries
+source\ambiback-firmware\           firmware source downloaded from GitHub
+downloads\                           downloaded archives (reused)
+_build\, _cache\                     build output
+devices\<device>.png                 optional picture that replaces the bundled device picture
 ```
 
-- [esptool](https://github.com/espressif/esptool/releases) comes from Espressif.
-- ESP32 cores and toolchains come from [arduino-esp32](https://github.com/espressif/arduino-esp32).
-- Building firmware also needs Arduino IDE 1.8 with `arduino-builder` and the firmware's libraries. Set the paths in the tool's settings.
-- Earlier firmware releases were built with a customized ESP32 core 2.0.0, which is not published yet. See the [firmware README](https://github.com/ambiback/ambiback-firmware) for the current build status.
+Downloads come from GitHub: [arduino-cli](https://github.com/arduino/arduino-cli/releases), the [ESP32 core](https://github.com/espressif/arduino-esp32) and its tools (package index), the libraries at fixed tags ([FastLED](https://github.com/FastLED/FastLED) 3.10.3, [AsyncTCP](https://github.com/ESP32Async/AsyncTCP) v3.4.10, [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) v3.9.5, [WiFiClientSecureUdp](https://github.com/alorbach/wificlientsecureudp) 1.0.0, [esp8266-oled-ssd1306](https://github.com/ThingPulse/esp8266-oled-ssd1306) 4.6.2) and the [firmware](https://github.com/ambiback/ambiback-firmware). The Windows build of the Arduino IDE 1.8.x is only published on `downloads.arduino.cc`.
+
+The web UI headers of the firmware (`ambiwebserver_html_raw.h`, `ambiwebserver_html_raw_min.h`) are generated files. If they are missing, the tool creates them from `web\HTML` and `web\HTML_MIN`, like `web/convert.py --no-minify` (without minifying).
+
+For flashing, the tool uses the bootloader built with the image. Older images without one use `firmware\bootloader_qio_80m.bin` and `firmware\boot_app0.bin` if present, otherwise the files of the installed ESP32 core. `esptool.exe` comes from the installed ESP32 core, or from the data folder if it is there.
 
 ## Uploading firmware
 

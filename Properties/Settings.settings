@@ -21,25 +21,49 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="szBuildEnv" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1.0.4</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="szBinDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Program Files (x86)\Arduino</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="szSourceDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\AmbiBack\ambiback-firmware</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="szSourceFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">AmbiBack.Controller.ino</Value>
     </Setting>
     <Setting Name="szExtraIncludeDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\AmbiBack\Arduino</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="szStartupPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="szBuildDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\AmbiBack\build</Value>
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="szLanguage" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="bAdvancedMode" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="szBuilder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">arduino-cli</Value>
+    </Setting>
+    <Setting Name="szCliVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="szCoreVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)">3.3.6</Value>
+    </Setting>
+    <Setting Name="szIdeVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1.8.19</Value>
+    </Setting>
+    <Setting Name="szFirmwareRef" Type="System.String" Scope="User">
+      <Value Profile="(Default)">main</Value>
+    </Setting>
+    <Setting Name="bEasyWifi" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

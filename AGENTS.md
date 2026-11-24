@@ -6,7 +6,9 @@
 
 ### Key Capabilities
 
-- **Build** – Compile firmware via arduino-builder with custom build environments (1.0.4, 1.0.6, 2.0.0, 2.0.0.custom)
+- **Easy / Advanced mode** – Easy: pick the device by picture, choose the port, Install Firmware (automatic setup, build, flash, Wi-Fi). Advanced: all details
+- **Build** – Compile firmware with arduino-cli (default, one data folder per core in `arduino-cli/<core>`) or arduino-builder (IDE 1.8.x with `buildenv`/`buildtools`)
+- **Setup** – `frmSetup` / `ToolchainInstaller` download arduino-cli, the IDE 1.8.x, an ESP32 core with tools, the pinned libraries and the firmware source from GitHub
 - **Flash** – Flash firmware to device over USB/serial using esptool
 - **Monitor** – Serial monitor for device communication
 - **Upload** – Upload built firmware with `scripts/upload-firmware.ps1` (OpenSSH sftp, settings in `.env`)
@@ -14,9 +16,11 @@
 
 ### Tech Stack
 
-- **UI**: WinForms (frmMain, frmSettings)
+- **UI**: WinForms (frmMain, frmSettings, frmSetup); texts in `Localization.cs` (`L.T(key)`, English and German), colors in `Theme.cs`
+- **Paths**: `AppPaths.cs` – all folders relative to one data root (program folder if writable, else `%LOCALAPPDATA%\AmbiBack\USB Flasher`); an empty path setting uses the default
 - **Serial**: System.IO.Ports.SerialPort
-- **Build**: arduino-builder.exe with `-logger=machine`
+- **Build**: arduino-cli `compile` (sketch copied to `_build/_sketch/<device>/AmbiBack.Controller`) or arduino-builder.exe with `-logger=machine`
+- **Device pictures**: `Resources/devices/<type>.png` (copied to `devices\`), can be replaced in `<data root>\devices`
 - **Flash**: esptool.exe
 - **Output**: RichTextBox for colored debug/monitor output
 

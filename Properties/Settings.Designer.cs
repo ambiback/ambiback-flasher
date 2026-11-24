@@ -97,7 +97,7 @@ namespace AmbiBack_USB_Flasher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.0.4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string szBuildEnv {
             get {
                 return ((string)(this["szBuildEnv"]));
@@ -109,7 +109,7 @@ namespace AmbiBack_USB_Flasher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\Arduino")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string szBinDir {
             get {
                 return ((string)(this["szBinDir"]));
@@ -121,7 +121,7 @@ namespace AmbiBack_USB_Flasher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\AmbiBack\\ambiback-firmware")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string szSourceDir {
             get {
                 return ((string)(this["szSourceDir"]));
@@ -145,7 +145,7 @@ namespace AmbiBack_USB_Flasher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\AmbiBack\\Arduino")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string szExtraIncludeDir {
             get {
                 return ((string)(this["szExtraIncludeDir"]));
@@ -169,13 +169,109 @@ namespace AmbiBack_USB_Flasher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\AmbiBack\\build")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string szBuildDir {
             get {
                 return ((string)(this["szBuildDir"]));
             }
             set {
                 this["szBuildDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string szLanguage {
+            get {
+                return ((string)(this["szLanguage"]));
+            }
+            set {
+                this["szLanguage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bAdvancedMode {
+            get {
+                return ((bool)(this["bAdvancedMode"]));
+            }
+            set {
+                this["bAdvancedMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("arduino-cli")]
+        public string szBuilder {
+            get {
+                return ((string)(this["szBuilder"]));
+            }
+            set {
+                this["szBuilder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string szCliVersion {
+            get {
+                return ((string)(this["szCliVersion"]));
+            }
+            set {
+                this["szCliVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3.3.6")]
+        public string szCoreVersion {
+            get {
+                return ((string)(this["szCoreVersion"]));
+            }
+            set {
+                this["szCoreVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.8.19")]
+        public string szIdeVersion {
+            get {
+                return ((string)(this["szIdeVersion"]));
+            }
+            set {
+                this["szIdeVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("main")]
+        public string szFirmwareRef {
+            get {
+                return ((string)(this["szFirmwareRef"]));
+            }
+            set {
+                this["szFirmwareRef"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool bEasyWifi {
+            get {
+                return ((bool)(this["bEasyWifi"]));
+            }
+            set {
+                this["bEasyWifi"] = value;
             }
         }
     }
