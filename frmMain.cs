@@ -475,6 +475,11 @@ namespace AmbiBack_USB_Flasher
             {
                 CDeviceType selectedType = (CDeviceType)cbDevice.Items[cbDevice.SelectedIndex];
 
+                // Show the build information of the selected image, if the build wrote one
+                string szBuildInfoFile = AppRootPath + "\\firmware\\" + selectedType.DeviceType + "\\" + cbFirmwareVersion.Text + "\\buildinfo.txt";
+                if (File.Exists(szBuildInfoFile))
+                    AppendDebugText("Build info:\r\n" + File.ReadAllText(szBuildInfoFile) + "\r\n", Color.DarkCyan);
+
                 pFlash.StartInfo.FileName = AppRootPath + "\\esptool.exe";
                 pFlash.StartInfo.Arguments = "--chip esp32 --port " + cbComPort.Text + " --baud " + selectedType.UploadSpeed + " --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect " +
                                             "0xe000 \"" + AppRootPath + "\\firmware\\boot_app0.bin\" " +
@@ -700,6 +705,45 @@ namespace AmbiBack_USB_Flasher
             }
         }
 
+        /// <summary>Build ID for AMBIBACK_BUILD_ID: date, time and the short git commit of the source folder
+        /// (with "-dirty" if it has local changes). Without git only date and time.</summary>
+        private string GetBuildId()
+        {
+            string szId = DateTime.Now.ToString("yyyyMMdd-HHmm", CultureInfo.InvariantCulture);
+            try
+            {
+                string szCommit = RunGit("rev-parse --short HEAD");
+                if (!string.IsNullOrEmpty(szCommit))
+                {
+                    szId += "-" + szCommit;
+                    if (!string.IsNullOrEmpty(RunGit("status --porcelain --untracked-files=no")))
+                        szId += "-dirty";
+                }
+            }
+            catch (Exception)
+            {
+                // git is optional
+            }
+            return szId;
+        }
+
+        private string RunGit(string szArgs)
+        {
+            using (Process pGit = new Process())
+            {
+                pGit.StartInfo.FileName = "git";
+                pGit.StartInfo.Arguments = "-C \"" + szSourceDir + "\" " + szArgs;
+                pGit.StartInfo.CreateNoWindow = true;
+                pGit.StartInfo.UseShellExecute = false;
+                pGit.StartInfo.RedirectStandardOutput = true;
+                pGit.StartInfo.RedirectStandardError = true;
+                pGit.Start();
+                string szOut = pGit.StandardOutput.ReadToEnd().Trim();
+                pGit.WaitForExit(5000);
+                return pGit.ExitCode == 0 ? szOut : "";
+            }
+        }
+
         private bool doBuild()
         {
             bool bSuccess = false;
@@ -727,6 +771,7 @@ namespace AmbiBack_USB_Flasher
             string szOutFileBin = szBuildDir + "\\AmbiBack.Controller.ino.bin";
             string szOutFilePartition = szBuildDir + "\\AmbiBack.Controller.ino.partitions.bin";
             string szExtraPreProcessor = "";
+            string szBuildId = GetBuildId();
             
             szExtraPreProcessor =   "-DF_CPU=240000000L -DARDUINO=10813 " + 
                                     (selectedType.HasPSRam ? "-DBOARD_HAS_PSRAM " : "") +
@@ -735,6 +780,7 @@ namespace AmbiBack_USB_Flasher
                                     "-DARDUINO_BOARD=\\\"" + resolvedBoard + "\\\" " +
 //                                    "-DARDUINO_VARIANT=\\\"" + selectedType.Esp32Model + "\\\" " + 
                                     "-DESP32 " +
+                                    "-DAMBIBACK_BUILD_ID=\\\"" + szBuildId + "\\\" " +
                                     (chkEsp32Debug.Checked ? "-DCORE_DEBUG_LEVEL=ESP_LOG_VERBOSE -DLOG_LOCAL_LEVEL=ESP_LOG_VERBOSE" : "-DCORE_DEBUG_LEVEL=0") + " " +
                                     (chkAmbiBackExtraDiag.Checked ? "-DESP32_EXTRA_DIAG " : "") +
                                     (chkAmbiBackVerboseDebug.Checked ? "-DESP32_VERBOSE_DEBUG " : "") +
@@ -904,6 +950,15 @@ namespace AmbiBack_USB_Flasher
                     // Copy new builds
                     File.Copy(szOutFileBin, szOutFileBinDest, true);
                     File.Copy(szOutFilePartition, szOutFilePartitionDest, true);
+
+                    // Write build information next to the image (the firmware shows the same values in its web UI)
+                    File.WriteAllText(szOutDirDest + "\\buildinfo.txt",
+                        "version=" + txtVersionCode.Text + "\r\n" +
+                        "device=" + selectedType.DeviceType + "\r\n" +
+                        "buildid=" + szBuildId + "\r\n" +
+                        "buildenv=" + benv.Name + "\r\n" +
+                        "toolchain=" + (benv.UseLegacyToolchain ? "xtensa-esp32-elf-gcc " + benv.TensaTools : "esp-x32 " + benv.EspX32) + "\r\n" +
+                        "built=" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + "\r\n");
 
                     bSuccess = true;
                 }
