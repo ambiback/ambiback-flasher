@@ -40,7 +40,7 @@ namespace AmbiBack_USB_Flasher
             new PinnedLibrary("FastLED", "FastLED/FastLED", "3.10.3"),
             new PinnedLibrary("AsyncTCP", "ESP32Async/AsyncTCP", "v3.4.10"),
             new PinnedLibrary("ESPAsyncWebServer", "ESP32Async/ESPAsyncWebServer", "v3.9.5"),
-            new PinnedLibrary("WiFiClientSecureUdp", "alorbach/wificlientsecureudp", "a5b47bc9fdf71c081ff48f297192d9cbe7608fff"),
+            new PinnedLibrary("WiFiClientSecureUdp", "alorbach/wificlientsecureudp", "1.0.0"),
             new PinnedLibrary("ESP8266_and_ESP32_OLED_driver_for_SSD1306_displays", "ThingPulse/esp8266-oled-ssd1306", "4.6.2"),
         };
 
@@ -297,7 +297,12 @@ namespace AmbiBack_USB_Flasher
 
         public static bool AreLibrariesInstalled(string sketchbookDir)
         {
-            return Libraries.All(l => Directory.Exists(Path.Combine(sketchbookDir, "libraries", l.Folder)));
+            // Installed in the pinned version (the marker file is written after the download)
+            return Libraries.All(l =>
+            {
+                string marker = Path.Combine(sketchbookDir, "libraries", l.Folder, ".ambiback-tag");
+                return File.Exists(marker) && File.ReadAllText(marker).Trim() == l.Tag;
+            });
         }
 
         /// <summary>

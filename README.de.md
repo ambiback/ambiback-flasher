@@ -50,7 +50,7 @@ _build\, _cache\                     Build-Ausgabe
 devices\<gerät>.png                  optionales Bild, das das mitgelieferte Gerätebild ersetzt
 ```
 
-Die Downloads kommen von GitHub: [arduino-cli](https://github.com/arduino/arduino-cli/releases), der [ESP32-Core](https://github.com/espressif/arduino-esp32) mit seinen Tools (Paketindex), die Bibliotheken in festen Versionen ([FastLED](https://github.com/FastLED/FastLED) 3.10.3, [AsyncTCP](https://github.com/ESP32Async/AsyncTCP) v3.4.10, [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) v3.9.5) und die [Firmware](https://github.com/ambiback/ambiback-firmware). Die Windows-Version der Arduino IDE 1.8.x veröffentlicht Arduino nur auf `downloads.arduino.cc`.
+Die Downloads kommen von GitHub: [arduino-cli](https://github.com/arduino/arduino-cli/releases), der [ESP32-Core](https://github.com/espressif/arduino-esp32) mit seinen Tools (Paketindex), die Bibliotheken in festen Versionen ([FastLED](https://github.com/FastLED/FastLED) 3.10.3, [AsyncTCP](https://github.com/ESP32Async/AsyncTCP) v3.4.10, [ESPAsyncWebServer](https://github.com/ESP32Async/ESPAsyncWebServer) v3.9.5, [WiFiClientSecureUdp](https://github.com/alorbach/wificlientsecureudp) 1.0.0, [esp8266-oled-ssd1306](https://github.com/ThingPulse/esp8266-oled-ssd1306) 4.6.2) und die [Firmware](https://github.com/ambiback/ambiback-firmware). Die Windows-Version der Arduino IDE 1.8.x veröffentlicht Arduino nur auf `downloads.arduino.cc`.
 
 Die Web-UI-Header der Firmware (`ambiwebserver_html_raw.h`, `ambiwebserver_html_raw_min.h`) sind generierte Dateien. Fehlen sie, erzeugt das Werkzeug sie aus `web\HTML` und `web\HTML_MIN` wie `web/convert.py --no-minify` (ohne Minifizierung).
 
