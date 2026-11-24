@@ -45,7 +45,7 @@ namespace AmbiBack_USB_Flasher
         };
 
         /// <summary>Tools from the ESP32 package index that are needed to build for the classic ESP32.</summary>
-        private static readonly string[] NeededTools = { "xtensa-esp32-elf-gcc", "esp-x32", "esptool_py", "mkspiffs", "mklittlefs", "esp32-libs" };
+        private static readonly string[] NeededTools = { "xtensa-esp32-elf-gcc", "esp-x32", "esptool_py", "mkspiffs", "mklittlefs", "esp32-libs", "esp32-arduino-libs" };
 
         public static readonly string[] FallbackCliVersions = { "1.6.0" };
         public static readonly string[] FallbackIdeVersions = { "1.8.19" };
@@ -229,13 +229,14 @@ namespace AmbiBack_USB_Flasher
             if (platform == null) throw new InvalidOperationException("ESP32 core " + coreVersion + " not found in the package index.");
 
             string coreDir = Path.Combine(AppPaths.BuildEnvDir, coreVersion, "packages", "esp32", "hardware", "esp32", coreVersion);
-            if (File.Exists(Path.Combine(coreDir, "platform.txt")))
+            if (IsComplete(coreDir))
                 _log("ESP32 core " + coreVersion + " is already installed (arduino-builder).");
             else
             {
                 string url = platform["url"].Value;
                 string zip = await DownloadAsync(url, platform["archiveFileName"].Value, "ESP32 core " + coreVersion);
                 await Task.Run(() => ExtractZip(zip, coreDir, true));
+                MarkComplete(coreDir);
             }
 
             foreach (JSONNode dep in platform["toolsDependencies"].Children)
@@ -243,7 +244,7 @@ namespace AmbiBack_USB_Flasher
                 string name = dep["name"].Value, ver = dep["version"].Value;
                 if (!NeededTools.Contains(name)) continue;
                 string toolDir = Path.Combine(AppPaths.BuildToolsDir, coreVersion, "tools", name, ver);
-                if (Directory.Exists(toolDir) && Directory.EnumerateFileSystemEntries(toolDir).Any())
+                if (IsComplete(toolDir))
                 {
                     _log("Tool " + name + " " + ver + " is already installed.");
                     continue;
@@ -252,9 +253,15 @@ namespace AmbiBack_USB_Flasher
                 if (sys == null) throw new InvalidOperationException("No Windows download for tool " + name + " " + ver + " in the package index.");
                 string zip = await DownloadAsync(sys["url"].Value, sys["archiveFileName"].Value, name + " " + ver);
                 await Task.Run(() => ExtractZip(zip, toolDir, true));
+                MarkComplete(toolDir);
             }
             _log("ESP32 core " + coreVersion + " installed for arduino-builder.");
         }
+
+        // Written after an archive was extracted completely, so a canceled or failed extraction is repeated next time
+        private const string CompleteMarker = ".ambiback-complete";
+        private static bool IsComplete(string dir) { return File.Exists(Path.Combine(dir, CompleteMarker)); }
+        private static void MarkComplete(string dir) { File.WriteAllText(Path.Combine(dir, CompleteMarker), DateTime.UtcNow.ToString("o")); }
 
         private static JSONNode FindToolSystem(JSONNode pkg, string name, string ver)
         {
@@ -374,7 +381,8 @@ namespace AmbiBack_USB_Flasher
             _progress(-1, "Extract " + Path.GetFileName(zipFile));
             _log("Extract " + Path.GetFileName(zipFile) + " -> " + destDir);
             Directory.CreateDirectory(destDir);
-            string fullDest = Path.GetFullPath(destDir);
+            // With a trailing separator, so a sibling folder like "FastLED2" does not pass as being inside "FastLED"
+            string fullDest = Path.GetFullPath(destDir).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
             using (var archive = ZipFile.OpenRead(zipFile))
             {
                 string prefix = "";
@@ -421,21 +429,25 @@ namespace AmbiBack_USB_Flasher
             p.StartInfo.StandardOutputEncoding = Encoding.UTF8;
             p.StartInfo.StandardErrorEncoding = Encoding.UTF8;
             if (!string.IsNullOrEmpty(workDir)) p.StartInfo.WorkingDirectory = workDir;
-            p.EnableRaisingEvents = true;
             DataReceivedEventHandler h = (s, e) => { if (e.Data != null) onLine?.Invoke(e.Data); };
             p.OutputDataReceived += h;
             p.ErrorDataReceived += h;
-            p.Exited += (s, e) =>
-            {
-                p.WaitForExit();   // flush the asynchronous output readers
-                tcs.TrySetResult(p.ExitCode);
-                p.Dispose();
-            };
             onLine?.Invoke("> " + Path.GetFileName(exe) + " " + args);
             p.Start();
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
-            cancel.Register(() => { try { if (!p.HasExited) p.Kill(); } catch { } tcs.TrySetCanceled(); });
+            var reg = cancel.Register(() => { try { if (!p.HasExited) p.Kill(); } catch { } tcs.TrySetCanceled(); });
+            // Wait only after the readers started: WaitForExit() then also waits until all output was read
+            Task.Run(() =>
+            {
+                try
+                {
+                    p.WaitForExit();
+                    tcs.TrySetResult(p.ExitCode);
+                }
+                catch (Exception ex) { tcs.TrySetException(ex); }
+                finally { reg.Dispose(); p.Dispose(); }
+            });
             return tcs.Task;
         }
 

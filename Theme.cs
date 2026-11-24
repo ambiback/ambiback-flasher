@@ -61,6 +61,47 @@ namespace AmbiBack_USB_Flasher
             update(b, EventArgs.Empty);
         }
 
+        // Border of secondary buttons and cards: 3:1 against white for the buttons (non-text contrast)
+        public static readonly Color ControlBorder = Color.FromArgb(0x93, 0x9B, 0xA6);
+        public static readonly Color HoverBack = Color.FromArgb(0xEA, 0xF1, 0xF7);
+        public static readonly Color PressedBack = Color.FromArgb(0xD9, 0xE6, 0xF0);
+        public static readonly Color PrimaryText = Color.FromArgb(0x22, 0x26, 0x2B);
+        public static readonly Font CardTitleFont = new Font("Segoe UI Semibold", 9F);
+
+        /// <summary>Style a normal (secondary) button: white, thin border, light blue on hover.</summary>
+        public static void StyleSecondary(Button b)
+        {
+            b.FlatStyle = FlatStyle.Flat;
+            b.FlatAppearance.BorderSize = 1;
+            b.FlatAppearance.BorderColor = ControlBorder;
+            b.FlatAppearance.MouseOverBackColor = HoverBack;
+            b.FlatAppearance.MouseDownBackColor = PressedBack;
+            b.BackColor = Card;
+            if (b.ForeColor == SystemColors.ControlText) b.ForeColor = PrimaryText;
+            b.UseVisualStyleBackColor = false;
+            b.Cursor = Cursors.Hand;
+        }
+
+        /// <summary>Style a button whose action cannot be undone (red text, secondary look).</summary>
+        public static void StyleDestructive(Button b)
+        {
+            StyleSecondary(b);
+            b.ForeColor = Destructive;
+        }
+
+        /// <summary>Path of a rectangle with rounded corners.</summary>
+        public static System.Drawing.Drawing2D.GraphicsPath RoundedRect(Rectangle r, int radius)
+        {
+            int d = radius * 2;
+            var p = new System.Drawing.Drawing2D.GraphicsPath();
+            p.AddArc(r.X, r.Y, d, d, 180, 90);
+            p.AddArc(r.Right - d, r.Y, d, d, 270, 90);
+            p.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
+            p.AddArc(r.X, r.Bottom - d, d, d, 90, 90);
+            p.CloseFigure();
+            return p;
+        }
+
         /// <summary>Style a toggle (RadioButton with button appearance) for the Easy / Advanced switch.</summary>
         public static void StyleSegment(RadioButton rb)
         {
@@ -74,6 +115,64 @@ namespace AmbiBack_USB_Flasher
             EventHandler update = (s, e) => rb.ForeColor = rb.Checked ? Color.White : Color.FromArgb(0x22, 0x26, 0x2B);
             rb.CheckedChanged += update;
             update(rb, EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    /// GroupBox drawn as a white card with rounded corners, a light border and a semibold title,
+    /// instead of the etched frame. Layout and child handling stay those of the GroupBox.
+    /// </summary>
+    public class CardGroupBox : GroupBox
+    {
+        public CardGroupBox()
+        {
+            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint |
+                     ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            BackColor = Theme.Card;
+        }
+
+        /// <summary>Space below the card that shows the parent background (for cards docked on top of each other).</summary>
+        [System.ComponentModel.DefaultValue(0)]
+        public int BottomGap { get; set; }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            g.Clear(Parent != null ? Parent.BackColor : Theme.Surface);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            using (var path = Theme.RoundedRect(new Rectangle(0, 0, Width - 1, Height - 1 - BottomGap), 6))
+            using (var fill = new SolidBrush(Theme.Card))
+            using (var pen = new Pen(Theme.Separator))
+            {
+                g.FillPath(fill, path);
+                g.DrawPath(pen, path);
+            }
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+            TextRenderer.DrawText(g, Text, Theme.CardTitleFont, new Point(9, 3),
+                Enabled ? Theme.PrimaryText : Theme.SecondaryText, TextFormatFlags.NoPrefix);
+        }
+    }
+
+    /// <summary>Flat tool strip: plain background, no border or gradient.</summary>
+    public class FlatToolStripRenderer : ToolStripSystemRenderer
+    {
+        protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
+        {
+            using (var b = new SolidBrush(e.ToolStrip.BackColor))
+                e.Graphics.FillRectangle(b, e.AffectedBounds);
+        }
+
+        protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
+        {
+            using (var p = new Pen(Theme.Separator))
+                e.Graphics.DrawLine(p, 0, e.ToolStrip.Height - 1, e.ToolStrip.Width, e.ToolStrip.Height - 1);
+        }
+
+        protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
+        {
+            if (!e.Item.Selected && !e.Item.Pressed) return;
+            using (var b = new SolidBrush(e.Item.Pressed ? Theme.PressedBack : Theme.HoverBack))
+                e.Graphics.FillRectangle(b, new Rectangle(Point.Empty, e.Item.Size));
         }
     }
 }

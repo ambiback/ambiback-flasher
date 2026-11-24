@@ -70,6 +70,13 @@ namespace AmbiBack_USB_Flasher
             {
                 string s = Setting(Properties.Settings.Default.szBinDir);
                 if (s != null) return s;
+                // The version chosen in the setup dialog, otherwise the newest installed one
+                string chosen = Properties.Settings.Default.szIdeVersion;
+                if (!string.IsNullOrWhiteSpace(chosen))
+                {
+                    string dir = Path.Combine(ToolsDir, "arduino-ide", chosen.Trim());
+                    if (File.Exists(Path.Combine(dir, "arduino-builder.exe"))) return dir;
+                }
                 string local = NewestSubdir(Path.Combine(ToolsDir, "arduino-ide"), "arduino-builder.exe");
                 if (local != null) return local;
                 return @"C:\Program Files (x86)\Arduino";

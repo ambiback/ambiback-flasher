@@ -104,14 +104,14 @@ namespace AmbiBack_USB_Flasher
             this.panelAdvanced = new System.Windows.Forms.Panel();
             this.splitAdvanced = new System.Windows.Forms.SplitContainer();
             this.panelAdvLeft = new System.Windows.Forms.Panel();
-            this.gbWifi = new System.Windows.Forms.GroupBox();
+            this.gbWifi = new AmbiBack_USB_Flasher.CardGroupBox();
             this.lblSsid = new System.Windows.Forms.Label();
             this.txtWifiSSID = new System.Windows.Forms.TextBox();
             this.lblKey = new System.Windows.Forms.Label();
             this.txtWifiKey = new System.Windows.Forms.TextBox();
             this.cmdSetWifi = new System.Windows.Forms.Button();
             this.cmdResetWifi = new System.Windows.Forms.Button();
-            this.gbDeviceControl = new System.Windows.Forms.GroupBox();
+            this.gbDeviceControl = new AmbiBack_USB_Flasher.CardGroupBox();
             this.lblLedMode = new System.Windows.Forms.Label();
             this.cmdModeOff = new System.Windows.Forms.Button();
             this.cmdModeDemo = new System.Windows.Forms.Button();
@@ -121,7 +121,7 @@ namespace AmbiBack_USB_Flasher
             this.txtRelayID = new System.Windows.Forms.TextBox();
             this.cmdSetRelay = new System.Windows.Forms.Button();
             this.cmdFactoryDefaults = new System.Windows.Forms.Button();
-            this.gbDeviceInfo = new System.Windows.Forms.GroupBox();
+            this.gbDeviceInfo = new AmbiBack_USB_Flasher.CardGroupBox();
             this.lblInfoVersion = new System.Windows.Forms.Label();
             this.txtConnectedDeviceVersion = new System.Windows.Forms.TextBox();
             this.txtConnectedDeviceType = new System.Windows.Forms.TextBox();
@@ -132,7 +132,7 @@ namespace AmbiBack_USB_Flasher
             this.txtConnectedDeviceName = new System.Windows.Forms.TextBox();
             this.lblInfoIp = new System.Windows.Forms.Label();
             this.txtConnectedDeviceIP = new System.Windows.Forms.TextBox();
-            this.gbBuild = new System.Windows.Forms.GroupBox();
+            this.gbBuild = new AmbiBack_USB_Flasher.CardGroupBox();
             this.lblDevice = new System.Windows.Forms.Label();
             this.cbDevice = new System.Windows.Forms.ComboBox();
             this.lblVersion = new System.Windows.Forms.Label();
@@ -153,7 +153,7 @@ namespace AmbiBack_USB_Flasher
             this.cmdCleanBuild = new System.Windows.Forms.Button();
             this.cmdBuildAndUpload = new System.Windows.Forms.Button();
             this.cmdUpload = new System.Windows.Forms.Button();
-            this.gbConnection = new System.Windows.Forms.GroupBox();
+            this.gbConnection = new AmbiBack_USB_Flasher.CardGroupBox();
             this.lblComPort = new System.Windows.Forms.Label();
             this.cbComPort = new System.Windows.Forms.ComboBox();
             this.lblBaudrate = new System.Windows.Forms.Label();
@@ -161,7 +161,7 @@ namespace AmbiBack_USB_Flasher
             this.cmdMonitor = new System.Windows.Forms.Button();
             this.cmdGetInfo = new System.Windows.Forms.Button();
             this.cmdReboot = new System.Windows.Forms.Button();
-            this.gbDebug = new System.Windows.Forms.GroupBox();
+            this.gbDebug = new AmbiBack_USB_Flasher.CardGroupBox();
             this.txtDebug = new System.Windows.Forms.RichTextBox();
             this.toolStripLog = new System.Windows.Forms.ToolStrip();
             this.tsbClearLog = new System.Windows.Forms.ToolStripButton();
@@ -1634,14 +1634,14 @@ namespace AmbiBack_USB_Flasher
         private System.Windows.Forms.Panel panelAdvanced;
         private System.Windows.Forms.SplitContainer splitAdvanced;
         private System.Windows.Forms.Panel panelAdvLeft;
-        private System.Windows.Forms.GroupBox gbWifi;
+        private AmbiBack_USB_Flasher.CardGroupBox gbWifi;
         private System.Windows.Forms.Label lblSsid;
         private System.Windows.Forms.TextBox txtWifiSSID;
         private System.Windows.Forms.Label lblKey;
         private System.Windows.Forms.TextBox txtWifiKey;
         private System.Windows.Forms.Button cmdSetWifi;
         private System.Windows.Forms.Button cmdResetWifi;
-        private System.Windows.Forms.GroupBox gbDeviceControl;
+        private AmbiBack_USB_Flasher.CardGroupBox gbDeviceControl;
         private System.Windows.Forms.Label lblLedMode;
         private System.Windows.Forms.Button cmdModeOff;
         private System.Windows.Forms.Button cmdModeDemo;
@@ -1651,7 +1651,7 @@ namespace AmbiBack_USB_Flasher
         private System.Windows.Forms.TextBox txtRelayID;
         private System.Windows.Forms.Button cmdSetRelay;
         private System.Windows.Forms.Button cmdFactoryDefaults;
-        private System.Windows.Forms.GroupBox gbDeviceInfo;
+        private AmbiBack_USB_Flasher.CardGroupBox gbDeviceInfo;
         private System.Windows.Forms.Label lblInfoVersion;
         private System.Windows.Forms.TextBox txtConnectedDeviceVersion;
         private System.Windows.Forms.TextBox txtConnectedDeviceType;
@@ -1662,7 +1662,7 @@ namespace AmbiBack_USB_Flasher
         private System.Windows.Forms.TextBox txtConnectedDeviceName;
         private System.Windows.Forms.Label lblInfoIp;
         private System.Windows.Forms.TextBox txtConnectedDeviceIP;
-        private System.Windows.Forms.GroupBox gbBuild;
+        private AmbiBack_USB_Flasher.CardGroupBox gbBuild;
         private System.Windows.Forms.Label lblDevice;
         private System.Windows.Forms.ComboBox cbDevice;
         private System.Windows.Forms.Label lblVersion;
@@ -1683,7 +1683,7 @@ namespace AmbiBack_USB_Flasher
         private System.Windows.Forms.Button cmdCleanBuild;
         private System.Windows.Forms.Button cmdBuildAndUpload;
         private System.Windows.Forms.Button cmdUpload;
-        private System.Windows.Forms.GroupBox gbConnection;
+        private AmbiBack_USB_Flasher.CardGroupBox gbConnection;
         private System.Windows.Forms.Label lblComPort;
         private System.Windows.Forms.ComboBox cbComPort;
         private System.Windows.Forms.Label lblBaudrate;
@@ -1691,7 +1691,7 @@ namespace AmbiBack_USB_Flasher
         private System.Windows.Forms.Button cmdMonitor;
         private System.Windows.Forms.Button cmdGetInfo;
         private System.Windows.Forms.Button cmdReboot;
-        private System.Windows.Forms.GroupBox gbDebug;
+        private AmbiBack_USB_Flasher.CardGroupBox gbDebug;
         private System.Windows.Forms.RichTextBox txtDebug;
         private System.Windows.Forms.ToolStrip toolStripLog;
         private System.Windows.Forms.ToolStripButton tsbClearLog;

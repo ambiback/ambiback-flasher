@@ -149,9 +149,37 @@ namespace AmbiBack_USB_Flasher
             Theme.StylePrimary(cmdFlash);
             lvDevices.BackColor = Color.White;
 
+            // Advanced: white cards on the same light surface as Easy mode, flat secondary buttons
+            splitAdvanced.BackColor = Theme.Surface;
+            panelAdvLeft.BackColor = Theme.Surface;
+            foreach (Button b in AllControls(panelAdvanced).OfType<Button>())
+            {
+                if (b == cmdFlash) continue;
+                if (b == cmdFactoryDefaults) Theme.StyleDestructive(b);
+                else Theme.StyleSecondary(b);
+            }
+            // The cards are docked to the top; each one keeps an unpainted gap below itself
+            foreach (CardGroupBox card in new[] { gbConnection, gbBuild, gbDeviceInfo, gbDeviceControl, gbWifi })
+            {
+                card.BottomGap = 8;
+                card.Height += 8;
+            }
+            toolStripLog.BackColor = Theme.Card;
+            toolStripLog.Renderer = new FlatToolStripRenderer();
+            toolStripLog.Padding = new Padding(2, 2, 2, 4);
+
             txtDebug.BackColor = Theme.LogBack;
             txtDebug.ForeColor = Theme.LogText;
             txtDebug.Font = Theme.LogFont;
+        }
+
+        private static IEnumerable<Control> AllControls(Control root)
+        {
+            foreach (Control c in root.Controls)
+            {
+                yield return c;
+                foreach (Control child in AllControls(c)) yield return child;
+            }
         }
 
         private static Image LoadImageResource(string name)
@@ -431,9 +459,10 @@ namespace AmbiBack_USB_Flasher
             if (e.Index < 0) return;
             var t = (CDeviceType)cbDevice.Items[e.Index];
             int size = e.Bounds.Height - 4;
-            Image thumb = imgDevices.Images.ContainsKey(t.DeviceType) ? imgDevices.Images[t.DeviceType] : null;
-            if (thumb != null)
-                e.Graphics.DrawImage(thumb, e.Bounds.X + 2, e.Bounds.Y + 2, size, size);
+            // ImageList.Images[key] creates a new Bitmap on every access; Draw does not
+            int imgIndex = imgDevices.Images.IndexOfKey(t.DeviceType);
+            if (imgIndex >= 0)
+                imgDevices.Draw(e.Graphics, e.Bounds.X + 2, e.Bounds.Y + 2, size, size, imgIndex);
             var textRect = new Rectangle(e.Bounds.X + size + 8, e.Bounds.Y, e.Bounds.Width - size - 8, e.Bounds.Height);
             TextRenderer.DrawText(e.Graphics, t.DisplayLabel.Replace("AmbiBack ", ""), e.Font, textRect, e.ForeColor,
                 TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
@@ -562,7 +591,8 @@ namespace AmbiBack_USB_Flasher
             cbEasyPort.Items.Clear();
             cbEasyPort.Items.AddRange(aPorts);
             string pick = null;
-            if (added.Length > 0 && !_loading && _knownPortsInitialized) pick = added.Last();
+            // Never switch to a new port while building or flashing: the job must stay on the chosen port
+            if (added.Length > 0 && !_loading && _knownPortsInitialized && !_busy) pick = added.Last();
             else if (easyCurrent != null && aPorts.Contains(easyCurrent)) pick = easyCurrent;
             else if (aPorts.Contains(current)) pick = current;
             else if (aPorts.Length > 0) pick = aPorts.Last();
@@ -585,7 +615,7 @@ namespace AmbiBack_USB_Flasher
 
         private void cbEasyPort_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbEasyPort.SelectedItem is string port && serialPort == null)
+            if (cbEasyPort.SelectedItem is string port && serialPort == null && !_busy)
                 cbComPort.Text = port;
         }
 
@@ -1129,10 +1159,15 @@ namespace AmbiBack_USB_Flasher
             if (string.IsNullOrEmpty(cbBuildEnv.Text))
             {
                 if (MessageBox.Show(this, L.F("dlg.noEnv", cbBuilder.Text), L.T("dlg.noEnv.title"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    cmdSetupTools_Click(this, EventArgs.Empty);
+                    ShowSetupDialog();   // the build runs while busy, so not through the button handler
                 return false;
             }
             if (!await EnsureSourceAsync(true)) return false;
+            if (string.IsNullOrWhiteSpace(txtVersionCode.Text))
+            {
+                AppendDebugText("No AMBIBACK_VERSION found in " + Path.Combine(AppPaths.SourceDir, "globalincludes.h") + "\r\n", Color.Red);
+                return false;
+            }
 
             SetStatus(L.F("status.building", selectedType.DisplayLabel));
             bool ok = IsCliBuilder ? await DoBuildCliAsync(selectedType) : doBuildLegacy(selectedType);
@@ -1265,6 +1300,27 @@ namespace AmbiBack_USB_Flasher
         }
 
         /// <summary>Copy the built files to firmware\&lt;device&gt;\&lt;version&gt; and write buildinfo.txt.</summary>
+        /// <summary>
+        /// runtime.tools paths for every tool installed under &lt;toolsBase&gt;\tools\&lt;name&gt;\&lt;version&gt;, so cores whose
+        /// tool names or versions differ from the fixed list above (e.g. esp32-arduino-libs) still find their tools.
+        /// </summary>
+        private static string InstalledToolPrefs(string toolsBase)
+        {
+            var sb = new StringBuilder();
+            string toolsDir = Path.Combine(toolsBase, "tools");
+            if (!Directory.Exists(toolsDir)) return "";
+            foreach (string toolDir in Directory.GetDirectories(toolsDir))
+            {
+                string name = Path.GetFileName(toolDir);
+                string verDir = Directory.GetDirectories(toolDir).OrderBy(d => AppPaths.VersionKey(Path.GetFileName(d))).LastOrDefault();
+                if (verDir == null) continue;
+                string ver = Path.GetFileName(verDir);
+                sb.Append("-prefs=\"runtime.tools." + name + ".path=" + verDir + "\" ");
+                sb.Append("-prefs=\"runtime.tools." + name + "-" + ver + ".path=" + verDir + "\" ");
+            }
+            return sb.ToString();
+        }
+
         private void CopyBuildOutput(CDeviceType selectedType, string szBuildDir, string szBuildId, string buildEnv, string toolchain)
         {
             string szOutDirDest = Path.Combine(AppPaths.FirmwareDir, selectedType.DeviceType, txtVersionCode.Text);
@@ -1356,6 +1412,7 @@ namespace AmbiBack_USB_Flasher
                                           "-prefs=runtime.tools.esp32-libs-" + benv.Name + ".path=" + benv.ToolsBasePath + "\\tools\\esp32-libs\\" + benv.Name + " ") +
                                     "-prefs=runtime.tools.esptool_py.path=" + benv.ToolsBasePath + "\\tools\\esptool_py\\" + benv.EsptoolPy + " " +
                                     "-prefs=runtime.tools.esptool_py-" + benv.EsptoolPy + ".path=" + benv.ToolsBasePath + "\\tools\\esptool_py\\" + benv.EsptoolPy + " " +
+                                    InstalledToolPrefs(benv.ToolsBasePath) +
                                     "-prefs=\"build.extra_flags=" + GetExtraFlags(selectedType, resolvedBoard, szBuildId) + "\" " +
                                     "-verbose " +
                                     "\"" + Path.Combine(szSourceDir, AppPaths.SourceFile) + "\"";
@@ -1860,6 +1917,7 @@ namespace AmbiBack_USB_Flasher
             cbComPort.Text = port;
             SetBusy(true);
             string version = option?.Version;
+            string prevBuilder = cbBuilder.Text;
             try
             {
                 if (version == null)
@@ -1869,10 +1927,18 @@ namespace AmbiBack_USB_Flasher
                     SetProgress(-1);
                     if (!await EnsureCliToolchainAsync()) return;
 
-                    if (!Directory.Exists(Path.Combine(AppPaths.SourceDir, ".git")))
+                    // Update the downloaded source; a git checkout or a custom source folder is used as it is
+                    string ino = Path.Combine(AppPaths.SourceDir, AppPaths.SourceFile);
+                    bool customSource = !string.IsNullOrWhiteSpace(Properties.Settings.Default.szSourceDir);
+                    bool gitSource = Directory.Exists(Path.Combine(AppPaths.SourceDir, ".git"));
+                    if (!File.Exists(ino) || (!customSource && !gitSource))
                     {
                         SetEasyStatus(L.T("easy.source"));
-                        if (!await DownloadSourceAsync()) { SetEasyStatus(L.T("easy.errSource"), Theme.Destructive); return; }
+                        if (!await DownloadSourceAsync())
+                        {
+                            if (!File.Exists(ino)) { SetEasyStatus(L.T("easy.errSource"), Theme.Destructive); return; }
+                            AppendDebugText("Download failed, building the existing source in " + AppPaths.SourceDir + "\r\n", Color.DarkCyan);
+                        }
                     }
 
                     cbBuilder.Text = BuilderCli;
@@ -1886,9 +1952,11 @@ namespace AmbiBack_USB_Flasher
 
                 cbFirmwareVersion.Text = version;
                 SetEasyStatus(L.T("easy.flashing"));
+                cbComPort.Text = port;   // the port chosen at the start, whatever was plugged in meanwhile
                 if (!await DoFlashAsync()) { SetEasyStatus(L.T("easy.errFlash"), Theme.Destructive); return; }
 
                 // Let the device start, then send Wi-Fi settings and ask for its info
+                cbComPort.Text = port;
                 OpenSerial(115200);
                 if (IsSerialOpen)
                 {
@@ -1914,6 +1982,8 @@ namespace AmbiBack_USB_Flasher
             }
             finally
             {
+                // Easy mode builds with arduino-cli but keeps the builder chosen in Advanced mode
+                if (cbBuilder.Text != prevBuilder) cbBuilder.Text = prevBuilder;
                 SetProgress(null);
                 SetBusy(false);
                 UpdateEasyCard();
@@ -2008,6 +2078,11 @@ namespace AmbiBack_USB_Flasher
         private void cmdSetupTools_Click(object sender, EventArgs e)
         {
             if (_busy) return;
+            ShowSetupDialog();
+        }
+
+        private void ShowSetupDialog()
+        {
             CloseSerial();
             using (var frm = new frmSetup())
                 frm.ShowDialog(this);
