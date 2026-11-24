@@ -1,0 +1,24 @@
+README.md
+  s_a59843c0379039::t_5afbfd1cf40ffa 53
+ToolchainInstaller.cs
+  s_a59843c0379039::t_1ca3ca78cd5cc5 300-305
+  s_a59843c0379039::t_6daf3734b4841f 43
+README.de.md
+  s_a59843c0379039::t_ff287c2cd5b097 53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "653f14702608e1cbe226d7118b7d4326e667fe11",
+  "prompts": {},
+  "sessions": {
+    "s_a59843c0379039": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1919d5b9-18dc-41a9-86c2-cd5f4f3802e7",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andre Lorbach <1675286+alorbach@users.noreply.github.com>"
+    }
+  }
+}
