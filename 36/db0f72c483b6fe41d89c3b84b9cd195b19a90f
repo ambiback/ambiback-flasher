@@ -1,0 +1,21 @@
+frmMain.cs
+  s_9dd31f0d4acc8d::t_eba912b0f888f4 310,368,371-373,605,615,618,620-622,626-631,634-645
+frmSettings.cs
+  s_9dd31f0d4acc8d::t_28e70edd3a74f9 40-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "36db0f72c483b6fe41d89c3b84b9cd195b19a90f",
+  "prompts": {},
+  "sessions": {
+    "s_9dd31f0d4acc8d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "47f733fe-6875-4233-ae6e-35369b6c61c7",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andre Lorbach <1675286+alorbach@users.noreply.github.com>"
+    }
+  }
+}
