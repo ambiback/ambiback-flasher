@@ -17,7 +17,7 @@ Es gehört zum [AmbiBack-Projekt](https://github.com/ambiback) und arbeitet mit 
 
 ## Schnellstart
 
-1. Setup oder portable ZIP von der [Release-Seite](https://github.com/ambiback/ambiback-flasher/releases) laden und den Flasher starten. (Noch kein Release? Selbst bauen, siehe [Entwicklerhandbuch](docs/developer.de.md).)
+1. [Setup](https://github.com/ambiback/ambiback-flasher/releases/download/v1.0.0/AmbiBack-USB-Flasher-1.0.0-setup.exe) oder [portable ZIP](https://github.com/ambiback/ambiback-flasher/releases/download/v1.0.0/AmbiBack-USB-Flasher-1.0.0.zip) der [Version 1.0.0](https://github.com/ambiback/ambiback-flasher/releases/tag/v1.0.0) laden und den Flasher starten. Neuere Versionen stehen auf der [Release-Seite](https://github.com/ambiback/ambiback-flasher/releases).
 2. Auf das Bild des eigenen Geräts klicken.
 3. Gerät mit einem USB-**Daten**kabel anschließen. Der Flasher wählt den Anschluss selbst.
 4. **Neueste Version von GitHub (jetzt bauen)** ausgewählt lassen. Optional: **Nach der Installation WLAN einrichten** anhaken und Name und Passwort des 2,4-GHz-Netzes eingeben.

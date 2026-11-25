@@ -17,7 +17,7 @@ It is part of the [AmbiBack project](https://github.com/ambiback) and works with
 
 ## Quick start
 
-1. Download the setup or the portable ZIP from the [Releases page](https://github.com/ambiback/ambiback-flasher/releases) and start the flasher. (No release yet? Build it yourself, see the [developer guide](docs/developer.md).)
+1. Download the [setup](https://github.com/ambiback/ambiback-flasher/releases/download/v1.0.0/AmbiBack-USB-Flasher-1.0.0-setup.exe) or the [portable ZIP](https://github.com/ambiback/ambiback-flasher/releases/download/v1.0.0/AmbiBack-USB-Flasher-1.0.0.zip) of [version 1.0.0](https://github.com/ambiback/ambiback-flasher/releases/tag/v1.0.0) and start the flasher. Newer versions are on the [Releases page](https://github.com/ambiback/ambiback-flasher/releases).
 2. Click the picture of your device.
 3. Connect the device with a USB **data** cable. The flasher picks its port.
 4. Leave **Newest version from GitHub (build now)** selected. Optional: tick **Set up Wi-Fi after installing** and enter your 2.4 GHz network name and password.

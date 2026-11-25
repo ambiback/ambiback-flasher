@@ -28,7 +28,7 @@ This guide explains how to install the AmbiBack firmware on an ESP32-based AmbiB
 
 ## Install the flasher
 
-Download the newest release from the [Releases page](https://github.com/ambiback/ambiback-flasher/releases). There are two files:
+Download the newest release from the [Releases page](https://github.com/ambiback/ambiback-flasher/releases) (currently [version 1.0.0](https://github.com/ambiback/ambiback-flasher/releases/tag/v1.0.0)). There are two files:
 
 | File | Use |
 |---|---|
@@ -37,7 +37,7 @@ Download the newest release from the [Releases page](https://github.com/ambiback
 
 The files are not code-signed. Windows SmartScreen may warn on the first start: click **More info**, then **Run anyway**.
 
-Until the first release is published, build the tool yourself, see the [developer guide](developer.md).
+To build the tool yourself instead, see the [developer guide](developer.md).
 
 ## Install the firmware (Easy mode)
 
