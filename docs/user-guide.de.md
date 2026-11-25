@@ -28,7 +28,7 @@ Dieses Handbuch erklärt, wie die AmbiBack-Firmware auf ein ESP32-basiertes Ambi
 
 ## Flasher installieren
 
-Das neueste Release von der [Release-Seite](https://github.com/ambiback/ambiback-flasher/releases) laden. Es gibt zwei Dateien:
+Das neueste Release von der [Release-Seite](https://github.com/ambiback/ambiback-flasher/releases) laden (derzeit [Version 1.0.0](https://github.com/ambiback/ambiback-flasher/releases/tag/v1.0.0)). Es gibt zwei Dateien:
 
 | Datei | Verwendung |
 |---|---|
@@ -37,7 +37,7 @@ Das neueste Release von der [Release-Seite](https://github.com/ambiback/ambiback
 
 Die Dateien sind nicht signiert. Windows SmartScreen kann beim ersten Start warnen: **Weitere Informationen** und dann **Trotzdem ausführen** klicken.
 
-Solange noch kein Release veröffentlicht ist, das Werkzeug selbst bauen, siehe [Entwicklerhandbuch](developer.de.md).
+Wer das Werkzeug lieber selbst baut, findet die Anleitung im [Entwicklerhandbuch](developer.de.md).
 
 ## Firmware installieren (einfacher Modus)
 
