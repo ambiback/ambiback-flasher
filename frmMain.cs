@@ -307,6 +307,7 @@ namespace AmbiBack_USB_Flasher
             menuViewEasy.Checked = !advanced;
             menuViewAdvanced.Checked = advanced;
             Properties.Settings.Default.bAdvancedMode = advanced;
+            if (advanced) SyncAdvancedPort();
         }
 
         private void rbMode_CheckedChanged(object sender, EventArgs e)
@@ -364,7 +365,11 @@ namespace AmbiBack_USB_Flasher
             lblEasyStatus.Text = text;
             lblEasyStatus.ForeColor = color ?? Theme.SecondaryText;
             SetStatus(text);
+            _easyHintShown = false;
         }
+
+        /// <summary>True while lblEasyStatus shows the port hint of UpdateEasyPortHint (in whatever language).</summary>
+        private bool _easyHintShown = false;
 
         /// <summary>Show progress in the status bar and in the Easy card. -1 = running without percentage, null = hide.</summary>
         private void SetProgress(int? percent)
@@ -597,7 +602,7 @@ namespace AmbiBack_USB_Flasher
             else if (aPorts.Contains(current)) pick = current;
             else if (aPorts.Length > 0) pick = aPorts.Last();
             if (pick != null) cbEasyPort.SelectedItem = pick;
-            if (string.IsNullOrEmpty(cbComPort.Text) && pick != null) cbComPort.Text = pick;
+            SyncAdvancedPort();
             _knownPortsInitialized = true;
             UpdateEasyPortHint();
         }
@@ -607,16 +612,37 @@ namespace AmbiBack_USB_Flasher
         private void UpdateEasyPortHint()
         {
             if (_busy) return;
+            // Replace only the port hint itself (also after a language change), never a result or error message
             if (cbEasyPort.Items.Count == 0)
                 SetEasyStatus(L.T("easy.noPort"), Theme.Destructive);
-            else if (lblEasyStatus.Text == L.T("easy.noPort") || string.IsNullOrEmpty(lblEasyStatus.Text))
+            else if (_easyHintShown || string.IsNullOrEmpty(lblEasyStatus.Text))
                 SetEasyStatus(L.T("easy.hint"));
+            else
+                return;
+            _easyHintShown = true;
         }
 
         private void cbEasyPort_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SyncAdvancedPort();
+        }
+
+        /// <summary>The Advanced port follows the Easy selection while no serial connection is open.</summary>
+        private void SyncAdvancedPort()
+        {
             if (cbEasyPort.SelectedItem is string port && serialPort == null && !_busy)
-                cbComPort.Text = port;
+                SetAdvancedPort(port);
+        }
+
+        /// <summary>
+        /// Set the Advanced port. cbComPort.Text is bound to szComPort, but the binding only becomes active
+        /// once the (hidden) Advanced panel is shown and then overwrites the combo with the stored value,
+        /// so the setting is updated as well.
+        /// </summary>
+        private void SetAdvancedPort(string port)
+        {
+            Properties.Settings.Default.szComPort = port;
+            cbComPort.Text = port;
         }
 
         private void timerComPort_Tick(object sender, EventArgs e)
