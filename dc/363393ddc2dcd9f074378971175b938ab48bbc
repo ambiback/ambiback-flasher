@@ -1,0 +1,21 @@
+docs/developer.de.md
+  s_52db9f03c9c3a4::t_007442da7afaf4 97
+docs/developer.md
+  s_52db9f03c9c3a4::t_4e6f9f29456e29 97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dc363393ddc2dcd9f074378971175b938ab48bbc",
+  "prompts": {},
+  "sessions": {
+    "s_52db9f03c9c3a4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4ee7d89-5105-46ff-aa21-629901d23c98",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andre Lorbach <1675286+alorbach@users.noreply.github.com>"
+    }
+  }
+}
