@@ -1,0 +1,46 @@
+docs/troubleshooting.de.md
+  s_52db9f03c9c3a4::t_7a8e90004070af 1-107
+installer/build-installer.ps1
+  s_52db9f03c9c3a4::t_ac232c7d5d50a7 1-166
+.github/workflows/ci.yml
+  s_52db9f03c9c3a4::t_35984b4d05d247 1-54
+docs/developer.de.md
+  s_52db9f03c9c3a4::t_39229920f91f75 1-97
+docs/developer.md
+  s_52db9f03c9c3a4::t_80705ba4e6bd41 1-96
+  s_52db9f03c9c3a4::t_eeeeca16413770 97
+README.de.md
+  s_52db9f03c9c3a4::t_53061e8ef79112 5,9-10,13,18,20-24,26,28,30-34,36,38-44
+AGENTS.md
+  s_52db9f03c9c3a4::t_3356bdacc6969a 34-35
+docs/user-guide.md
+  s_52db9f03c9c3a4::t_3c075c635dd8af 1-135,137-174
+  s_52db9f03c9c3a4::t_47b9ac1b603fe3 136
+.github/workflows/release.yml
+  s_52db9f03c9c3a4::t_d891db72384e76 1-166,171-187,189-279,281,283,285-298,301-303,305,307-331
+  s_52db9f03c9c3a4::t_129f621761fadc 167-170,188,280,282,284,299-300,304,306
+installer/AmbiBackFlasher.iss
+  s_52db9f03c9c3a4::t_879306ef922882 1-286
+docs/troubleshooting.md
+  s_52db9f03c9c3a4::t_e971ca3673533d 1-107
+README.md
+  s_52db9f03c9c3a4::t_8e1fcd9c8be1da 5,9-10,18,20-24,26,28,30-34,36,38-44
+docs/user-guide.de.md
+  s_52db9f03c9c3a4::t_2a674f4e107a32 1-174
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "553b690c7a6aa51572b3d46f59f9d84457319dae",
+  "prompts": {},
+  "sessions": {
+    "s_52db9f03c9c3a4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e4ee7d89-5105-46ff-aa21-629901d23c98",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andre Lorbach <1675286+alorbach@users.noreply.github.com>"
+    }
+  }
+}
