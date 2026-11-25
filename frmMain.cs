@@ -769,6 +769,17 @@ namespace AmbiBack_USB_Flasher
                 this.serialPort.Write("%INFO:");
         }
 
+        /// <summary>
+        /// Writes the string as raw UTF-8 bytes without a length prefix.
+        /// BinaryWriter.Write(string) puts a 7-bit length byte in front of the string; the firmware
+        /// parser copies every byte above 0x1F, so for strings of 32+ characters that byte became
+        /// part of the stored value (e.g. the Wi-Fi key).
+        /// </summary>
+        private static void WriteRaw(BinaryWriter bw, string text)
+        {
+            bw.Write(Encoding.UTF8.GetBytes(text ?? string.Empty));
+        }
+
         private void SendWifi(string ssid, string key)
         {
             if (!IsSerialOpen) return;
@@ -776,11 +787,11 @@ namespace AmbiBack_USB_Flasher
             MemoryStream msPacket = new MemoryStream();
             BinaryWriter bwPacket = new BinaryWriter(msPacket);
 
-            // Write Byte array
-            bwPacket.Write("%WIFI:");
-            bwPacket.Write(ssid);
+            // Write Byte array: "%WIFI:" ssid 0x00 key 0x00
+            WriteRaw(bwPacket, "%WIFI:");
+            WriteRaw(bwPacket, ssid);
             bwPacket.Write((byte)0x00);
-            bwPacket.Write(key);
+            WriteRaw(bwPacket, key);
             bwPacket.Write((byte)0x00);
 
             // Send byte area to serial
@@ -802,8 +813,9 @@ namespace AmbiBack_USB_Flasher
                 BinaryWriter bwPacket = new BinaryWriter(msPacket);
                 byte bLeds = (byte)0xFF; //  0x7F;
                 // Write 4 Byte Detection Header
-                bwPacket.Write("%LEDDATA:");
+                WriteRaw(bwPacket, "%LEDDATA:");
                 bwPacket.Write((byte)0x00);
+                int iHeaderEnd = (int)msPacket.Position; // offset of the 4 byte package header
 
                 // Write 4 Byte Package Header
                 bwPacket.Write(bLeds); // Count of LEDs (Length)
@@ -824,7 +836,9 @@ namespace AmbiBack_USB_Flasher
                 byte[] bData = msPacket.ToArray();
 
                 // Calc Checksum!
-                bData[Globals.TCP_HEADLEN + 10] = Globals.crc_8(bData, bData.Length, Globals.TCP_HEADLEN + 10);
+                // Checksum is the last byte of the 4 byte package header
+                int iCrcIdx = iHeaderEnd + Globals.TCP_HEADLEN - 1;
+                bData[iCrcIdx] = Globals.crc_8(bData, bData.Length, iCrcIdx);
 
                 // Send byte area to serial
                 this.serialPort.Write(bData, 0, bData.Length);
@@ -865,7 +879,7 @@ namespace AmbiBack_USB_Flasher
             if (!IsSerialOpen) return;
             MemoryStream msPacket = new MemoryStream();
             BinaryWriter bwPacket = new BinaryWriter(msPacket);
-            bwPacket.Write(command);
+            WriteRaw(bwPacket, command);
             bwPacket.Write((byte)0x00);
             byte[] bData = msPacket.ToArray();
             this.serialPort.Write(bData, 0, bData.Length);
@@ -876,8 +890,8 @@ namespace AmbiBack_USB_Flasher
             if (!IsSerialOpen) return;
             MemoryStream msPacket = new MemoryStream();
             BinaryWriter bwPacket = new BinaryWriter(msPacket);
-            bwPacket.Write("%SETRELAY:");
-            bwPacket.Write(txtRelayID.Text);
+            WriteRaw(bwPacket, "%SETRELAY:");
+            WriteRaw(bwPacket, txtRelayID.Text);
             bwPacket.Write((byte)0x00);
             byte[] bData = msPacket.ToArray();
             this.serialPort.Write(bData, 0, bData.Length);
