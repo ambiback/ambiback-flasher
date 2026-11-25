@@ -37,19 +37,22 @@ namespace AmbiBack_USB_Flasher
             cmdOK.Text = L.T("settings.ok");
             cmdCancel.Text = L.T("settings.cancel");
 
-            // Hint and "Use Defaults" button below the fields
-            int shift = txtBuildDir.Bottom + 34 - cmdOK.Top;
-            cmdOK.Top += shift;
-            cmdCancel.Top += shift;
-            ClientSize = new Size(ClientSize.Width, cmdOK.Bottom + 12);
-            var lblHint = new Label { AutoSize = true, ForeColor = Theme.SecondaryText, Text = L.T("settings.hint"), Location = new Point(12, txtBuildDir.Bottom + 10) };
-            var cmdDefaults = new Button { Text = L.T("settings.reset"), Location = new Point(12, cmdOK.Top), Size = new Size(120, cmdOK.Height), UseVisualStyleBackColor = true };
+            // Hint and "Use Defaults" button below the fields. The layout is built from the
+            // (already scaled) control sizes, so it fits at any DPI and font size. The OK and
+            // Cancel buttons are anchored to the bottom: resize the form first, then place them,
+            // otherwise the resize moves them a second time and cuts them off.
+            int gap = txtBuildDir.Left;
+            var lblHint = new Label { AutoSize = true, ForeColor = Theme.SecondaryText, Text = L.T("settings.hint"), Location = new Point(gap, txtBuildDir.Bottom + gap / 2) };
+            Controls.Add(lblHint);
+            int buttonsTop = lblHint.Bottom + gap;
+            ClientSize = new Size(ClientSize.Width, buttonsTop + cmdOK.Height + gap);
+            cmdOK.Top = cmdCancel.Top = buttonsTop;
+            var cmdDefaults = new Button { Text = L.T("settings.reset"), Location = new Point(gap, buttonsTop), AutoSize = true, MinimumSize = new Size(cmdOK.Width + cmdOK.Width / 2, cmdOK.Height), UseVisualStyleBackColor = true };
             cmdDefaults.Click += (s, ev) =>
             {
                 txtBinDir.Text = txtSourceDir.Text = txtExtraIncludeDir.Text = txtStartupPath.Text = txtBuildDir.Text = "";
                 txtSourceFile.Text = AppPaths.DefaultSourceFile;
             };
-            Controls.Add(lblHint);
             Controls.Add(cmdDefaults);
 
             SetCue(txtBinDir, AppPaths.BinDir);
