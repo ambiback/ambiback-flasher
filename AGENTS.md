@@ -31,6 +31,8 @@
 - `build/_build/<device>/` – Build output (e.g. m5camtx)
 - `firmware/<device>/<version>/` – Compiled firmware images
 - `_usbdrivers/` – FTDI (CDM) and CP210x USB drivers
+- `docs/` – user guide, troubleshooting, developer guide (each `.md` + `.de.md`, keep them in parity), screenshots in `docs/images/`
+- `installer/` – `build-installer.ps1` (release build, ZIP, Inno Setup) and `AmbiBackFlasher.iss`; used by `.github/workflows/ci.yml` and `release.yml` (tag `v*` → draft release)
 
 ### Arduino Machine Output Format
 
